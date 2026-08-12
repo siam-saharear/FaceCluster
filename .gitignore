@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+*.pyc
+
+raugh.py
+media/mutual_face/*
+media/mutual_face_output/*

@@ -77,7 +77,7 @@ def image_distribution(canvas, images_n_faces, columns, cell_height, cell_width)
         relocation_coordinates[image_path] = [x,y,x+w,y+h]
     return canvas, relocation_coordinates
 
-def similarity(embedding_1, embedding_2, threshold=0.5):
+def similarity(embedding_1, embedding_2, threshold=0.3):
     similrity = (np.dot(embedding_1, embedding_2)
                 /
                 (np.linalg.norm(embedding_1) * np.linalg.norm(embedding_2))
@@ -160,61 +160,32 @@ for image_path in image_paths:
                                     "appearance":[{"path":image_path, "bbox":face.bbox, "face":face}]})
             face_id+=1
 
-escape = False
-while not escape:
-    for person in face_database:
-        person_id = person["id"]
-        embedding = person["embedding"]
-        appearances = person["appearance"]
-        canvas_copy = drawn_canvas.copy()
-        for appearance in appearances:
-            path = appearance["path"]
-            bbox = appearance["bbox"]
-            x1,y1, x2,y2 = bbox
-            face = appearance["face"]
+for person in face_database:
+    person_id = person["id"]
+    embedding = person["embedding"]
+    appearances = person["appearance"]
+    if len(appearances) <= 2:
+        continue
+    canvas_copy = drawn_canvas.copy()
+    for appearance in appearances:
+        path = appearance["path"]
+        bbox = appearance["bbox"]
+        x1,y1, x2,y2 = bbox
+        face = appearance["face"]
 
-            frame_coordinates = relocation_coordinats[path]
-            a1,b1, a2,b2 = frame_coordinates
-            cv2.rectangle(canvas_copy, (a1+x1, b1+y1), (a1+x2, b1+y2), (0,200,0), 2)
-        canvas_copy = image_resizer(canvas_copy, 700)
-        cv2.imshow(str(person_id), canvas_copy)
-        key = cv2.waitKey(0) & 0xFF
-        if key == ord("q"):
-            cv2.destroyAllWindows()
-            escape = True
-            break
-        if key == ord("n"):
-            cv2.destroyAllWindows()
-            continue
-
+        frame_coordinates = relocation_coordinats[path]
+        a1,b1, a2,b2 = frame_coordinates
+        cv2.rectangle(canvas_copy, (int(a1+x1), int(b1+y1)), (int(a1+x2), int(b1+y2)), (0,200,0), 50)
+    canvas_copy = image_resizer(canvas_copy, 700)
+    cv2.imshow(str(person_id), canvas_copy)
+    key = cv2.waitKey(0) & 0xFF
+    if key == ord("q"):
+        cv2.destroyAllWindows()
+        break
+    elif key == ord("n"):
+        cv2.destroyAllWindows()
+        continue
+    else:
+        break
                 
 
-# matches = []
-# for image_path in image_paths:
-#     image = images_n_faces[image_path]["image"]
-#     faces = images_n_faces[image_path]["faces"]
-#     for face in faces:
-#         face_embedding = face.embedding
-#         for compare_image_path in image_paths:
-#             if compare_image_path == image_path:
-#                 continue
-#             compare_faces = images_n_faces[compare_image_path]["faces"]
-#             for compare_face in compare_faces:
-#                 compare_face_embedding = compare_face.embedding
-#                 same_face = similarity(face_embedding, compare_face_embedding, threshold=0.4)
-#                 if same_face:
-#                     matches.append([
-#                         image_path, 
-#                         compare_image_path, 
-#                         face.bbox.astype(np.int32),
-#                         compare_face.bbox.astype(np.int32)
-#                         ])
-
-# drawn_canvas = draw_connections(canvas, matches, relocation_coordinats)
-
-# drawn_canvas = image_resizer(drawn_canvas, 1000)
-
-
-# cv2.imshow("drawn_canvas", drawn_canvas)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
