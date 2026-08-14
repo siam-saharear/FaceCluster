@@ -5,17 +5,8 @@ import cv2
 import numpy as np
 from insightface.app import FaceAnalysis
 
-def scrape_image_paths(*args):
-    folder_path = ""
-    for arg in args:
-        folder_path = os.path.join(folder_path, arg)
-    files = os.listdir(folder_path)
-    image_paths = []
-    for file in files:
-        file_extention = str((file.split("/")[-1]).split(".")[-1])
-        if file_extention.lower() == "png" or file_extention.lower() == "jpg":
-            image_paths.append(os.path.join(folder_path, file))
-    return image_paths
+from image_utils import scrape_image_paths, image_resizer
+
 
 def initailize_algo():
     app = FaceAnalysis(providers=["CPUExecutionProvider"])
@@ -112,12 +103,6 @@ def draw_connections(canvas, matches, relocation_coordinates):
         cv2.line(canvas, (b1x1,b1y1), (b2x1,b2y1), color, 20)
     return canvas
 
-def image_resizer(image, new_h=300):
-    h,w = image.shape[:2]
-    aspect_ratio = w/h
-    new_w = int(aspect_ratio*new_h)
-    resized = cv2.resize(image, (new_w, new_h),)
-    return resized
 
 image_paths = scrape_image_paths("media", "mutual_face")
 
