@@ -3,19 +3,10 @@ import time
 import random
 import cv2
 import numpy as np
-from insightface.app import FaceAnalysis
 
 from image_utils import scrape_image_paths, image_resizer
+from face_detection import initailize_algo, detect_faces
 
-
-def initailize_algo():
-    app = FaceAnalysis(providers=["CPUExecutionProvider"])
-    app.prepare(ctx_id=-1)
-    return app
-
-def detect_faces(image, app):
-    faces = app.get(image)    
-    return faces
 
 def crate_canvas(image_paths, height, width):
     canvas = np.zeros((height,width,3), dtype=np.uint8)
