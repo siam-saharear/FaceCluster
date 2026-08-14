@@ -1,7 +1,7 @@
 from insightface.app import FaceAnalysis
 
 
-def initailize_algo():
+def initialize_algo():
     app = FaceAnalysis(providers=["CPUExecutionProvider"])
     app.prepare(ctx_id=-1)
     return app
