@@ -7,17 +7,9 @@ import numpy as np
 from image_utils import scrape_image_paths, image_resizer
 from face_detection import initialize_algo, detect_faces
 from image_grid import crate_canvas, resize_image, image_distribution
+from face_clustering import build_face_database
 
 
-
-def similarity(embedding_1, embedding_2, threshold=0.3):
-    similrity = (np.dot(embedding_1, embedding_2)
-                /
-                (np.linalg.norm(embedding_1) * np.linalg.norm(embedding_2))
-                )
-    if similrity >= threshold:
-        return True
-    return False
 
 def draw_connections(canvas, matches, relocation_coordinates):
     for match in matches:
@@ -62,30 +54,8 @@ for image_path in image_paths:
 drawn_canvas, relocation_coordinats = image_distribution(canvas, images_n_faces, columns, cell_height, cell_width)
 
 
-face_database = []
-face_id = 0
-for image_path in image_paths:
-    faces = images_n_faces[image_path]["faces"]
-    for face in faces:
-        face_embedding = face.embedding
-        if len(face_database) == 0:
-            face_database.append({"id":face_id,
-                                  "embedding":face_embedding, 
-                                  "appearance":[{"path":image_path, "bbox":face.bbox, "face":face}]})
-            face_id += 1
-            continue
-        matched = False
-        for person in face_database:
-            compare_embedding = person["embedding"]
-            if similarity(face_embedding, compare_embedding):
-                person["appearance"].append({"path":image_path, "bbox":face.bbox, "face":face})
-                matched = True
-                break
-        if not matched:
-            face_database.append({"id":face_id,
-                                    "embedding":face_embedding,
-                                    "appearance":[{"path":image_path, "bbox":face.bbox, "face":face}]})
-            face_id+=1
+face_database = build_face_database(image_paths, images_n_faces)
+
 
 for person in face_database:
     person_id = person["id"]
