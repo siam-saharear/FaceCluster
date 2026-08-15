@@ -2,7 +2,7 @@ import cv2
 
 from image_utils import scrape_image_paths
 from face_detection import initialize_algo, detect_faces
-from image_grid import crate_canvas, resize_image, image_distribution
+from image_grid import create_canvas, resize_image, image_distribution
 from face_clustering import build_face_database
 from visualization import review_faces
 
@@ -11,7 +11,7 @@ from visualization import review_faces
 
 image_paths = scrape_image_paths("media", "mutual_face")
 
-canvas, (columns,rows), (cell_height, cell_width) = crate_canvas(image_paths, 9000, 16000)
+canvas, (columns,rows), (cell_height, cell_width) = create_canvas(image_paths, 9000, 16000)
 
 app = initialize_algo()
 

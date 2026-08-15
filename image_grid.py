@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-def crate_canvas(image_paths, height, width):
+def create_canvas(image_paths, height, width):
     canvas = np.zeros((height,width,3), dtype=np.uint8)
 
     columns = int(np.ceil(np.sqrt(len(image_paths))))
