@@ -2,7 +2,7 @@
 
 A Python computer vision project that detects and clusters similar faces across multiple images using InsightFace.
 
-Features
+<b>Features</b>
     Face detection
     Face similarity comparison
     Automatic face clustering
