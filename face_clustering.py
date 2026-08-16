@@ -1,7 +1,9 @@
 import numpy as np
 import config
 
-def similarity(embedding_1, embedding_2, threshold=config.FACE_SIMILARITY_THRESHOLD):
+def similarity(embedding_1, embedding_2, threshold=None):
+    if threshold == None:
+        threshold == config.FACE_SIMILARITY_THRESHOLD
     similrity = (np.dot(embedding_1, embedding_2)
                 /
                 (np.linalg.norm(embedding_1) * np.linalg.norm(embedding_2))
