@@ -1,0 +1,5 @@
+MEDIA_DIR = "media"
+IMAGE_FOLDER = "mutual_face"
+
+CANVAS_HEIGHT = 9000
+CANVAS_WIDTH = 16000

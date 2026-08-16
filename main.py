@@ -6,12 +6,12 @@ from image_grid import create_canvas, resize_image, image_distribution
 from face_clustering import build_face_database
 from visualization import review_faces
 
+import config
 
 
+image_paths = scrape_image_paths(config.MEDIA_DIR, config.IMAGE_FOLDER)
 
-image_paths = scrape_image_paths("media", "mutual_face")
-
-canvas, (columns,rows), (cell_height, cell_width) = create_canvas(image_paths, 9000, 16000)
+canvas, (columns,rows), (cell_height, cell_width) = create_canvas(image_paths, config.CANVAS_HEIGHT, config.CANVAS_WIDTH)
 
 app = initialize_algo()
 
